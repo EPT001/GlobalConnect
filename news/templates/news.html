@@ -1,0 +1,45 @@
+{% extends 'studentsconnect/base.html' %}
+
+{% block title_block %}International Student News{% endblock %}
+
+{% block body_block %}
+<!-- Hero Section -->
+<section class="hero text-center bg-light py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 mb-3">What's the News?</h1>
+                <p class="lead mb-4">Stay updated with the latest news and stories relevant to international students.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- News Section -->
+<section id="news-section" class="section py-5">
+    <div class="container">
+        <div class="row">
+            {% for title, desc, img, url in mylist %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ img }}" alt="News Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{{ url }}" target="_blank" class="text-dark">{{ title }}</a>
+                        </h5>
+                        <p class="card-text">{{ desc }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Bootstrap and jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+{% endblock %}
+

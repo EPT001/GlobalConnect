@@ -1,0 +1,79 @@
+{% extends 'studentsconnect/base.html' %}
+
+{% block title_block %}
+    Update Details
+{% endblock %}
+
+{% block body_block %}
+<div class="jumbotron p-4">
+    <div class="container">
+        <h1 class="jumbotron-heading text-center">Update User Details</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-light">
+                <div class="card-body">
+                    <form role="form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label class="required" for="id_username">Username:</label>
+                                <input type="text" name="username" class="form-control" id="id_username" value="{{ user_form.username.value }}">
+                                <small class="form-text text-muted">Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="required" for="id_email">E-mail:</label>
+                                <input type="email" name="email" class="form-control" id="id_email" value="{{ user_form.email.value }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_password">Password:</label>
+                                <input type="password" name="password" class="form-control" id="id_password">
+                                {% if not user_form.password.required %}
+                                    <small class="form-text text-muted">Please type your password again to confirm.</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_website">Socials:</label>
+                                <input type="url" name="website" class="form-control" id="id_website" value="{{ profile_form.website.value }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_picture">Profile Picture:</label>
+                                <input type="file" name="picture" class="form-control" id="id_picture">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_country">Country:</label>
+                                <select name="country" class="form-control" id="id_country">
+                                    <option value="">---------</option>
+                                    {% for country in profile_form.fields.country.queryset %}
+                                        <option value="{{ country.id }}" {% if country.id == profile_form.country.value %}selected{% endif %}>{{ country.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_university">University:</label>
+                                <select name="university" class="form-control" id="id_university">
+                                    <option value="">---------</option>
+                                    {% for university in profile_form.fields.university.queryset %}
+                                        <option value="{{ university.id }}" {% if university.id == profile_form.university.value %}selected{% endif %}>{{ university.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_profile_bio">Bio:</label>
+                                <input type="text" name="profile_bio" class="form-control" id="id_profile_bio" value="{{ profile_form.profile_bio.value }}">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

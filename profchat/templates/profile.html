@@ -1,0 +1,200 @@
+{% extends 'studentsconnect/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    {{ profile.user.username }}'s Profile - StudentsConnect
+{% endblock %}
+
+{% block body_block %}
+    <div class="container my-5">
+        <!-- Profile Header -->
+        <div class="text-center mb-5">
+            <!-- Profile Picture -->
+            <img src="{% if profile.picture %}{{ profile.picture.url }}{% else %}{% static 'images/default_profile_pic.jpg' %}{% endif %}" class="rounded-circle border border-light shadow-sm" alt="Profile Picture" style="width: 120px; height: 120px; object-fit: cover;">
+            <!-- Username -->
+            <h1 class="display-4 font-weight-bold text-dark mt-3">{{ profile.user.username }}'s Profile</h1>
+            <!-- Last Updated -->
+            <p class="text-muted">Last Updated: {{ profile.date_modified }}</p>
+
+            <!-- Follow/Unfollow Form -->
+            {% if request.user != profile.user %}
+                <div class="mt-4">
+                    <form method="POST" class="d-inline">
+                        {% csrf_token %}
+                        {% if request.user.userprofile in profile.followed_by.all %}
+                            <button class="btn btn-outline-danger" name="follow" value="unfollow" type="submit">
+                                Unfollow @{{ profile.user.username|lower }}
+                            </button>
+                        {% else %}
+                            <button class="btn btn-outline-success" name="follow" value="follow" type="submit">
+                                Follow @{{ profile.user.username|lower }}
+                            </button>
+                        {% endif %}
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Profile Details Section -->
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <div class="card shadow-lg border-light">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Profile Details</h5>
+                        <div class="row">
+                            <!-- Country -->
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3 border-light bg-light">
+                                    <h6 class="card-title">Country</h6>
+                                    <p class="card-text">{{ profile.country }}</p>
+                                    <a href="{% url 'profchat:profile_list' %}?country={{ profile.country.id }}" class="btn btn-info btn-sm">Find Others from {{ profile.country }}</a>
+                                </div>
+                            </div>
+
+                            <!-- University -->
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3 border-light bg-light">
+                                    <h6 class="card-title">University</h6>
+                                    <p class="card-text">{{ profile.university }}</p>
+                                    <a href="{% url 'profchat:profile_list' %}?university={{ profile.university.id }}" class="btn btn-info btn-sm">Find Others from {{ profile.university }}</a>
+                                </div>
+                            </div>
+
+                            <!-- Bio -->
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3 border-light bg-light">
+                                    <h6 class="card-title">Bio</h6>
+                                    <p class="card-text">
+                                        {% if profile.profile_bio|wordcount > 15 %}
+                                            {{ profile.profile_bio|truncatewords:15 }} <a href="#" class="text-info" data-toggle="modal" data-target="#bioModal">Read More</a>
+                                        {% else %}
+                                            {{ profile.profile_bio }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Website -->
+                            {% if profile.website %}
+                                <div class="col-md-4 mb-3">
+                                    <div class="card p-3 border-light bg-light">
+                                        <h6 class="card-title">Socials</h6>
+                                        <p class="card-text">
+                                            <a href="{{ profile.website }}" target="_blank" class="text-info">{{ profile.website }}</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User's Questions Section -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <div class="card shadow-lg border-light">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Questions Asked By {{ profile.user.username }}</h5>
+                        <ul class="list-unstyled">
+                            {% for question in profile.user.question_set.all %}
+                                <li>
+                                    <div class="card my-3 shadow-sm" style="background-color: #f8f9fa;">
+                                        <div class="card-body">
+                                            <h4 class="card-title">
+                                                <a href="{% url 'comhub:question_detail' question.id %}" class="text-dark">{{ question.title }}</a>
+                                            </h4>
+                                            <hr>
+                                            {% if question.content|wordcount <= 10 %}
+                                                <p class="card-text">{{ question.content }}</p>
+                                            {% else %}
+                                                <p class="card-text">{{ question.content|truncatewords:10 }} <a href="{% url 'comhub:question_detail' question.id %}" class="text-info">Read More</a></p>
+                                            {% endif %}
+                                            <p class="card-text text-muted" style="font-size: 0.9em;">
+                                                Asked By: <a href="#" class="text-dark">{{ question.user }}</a> &nbsp;|&nbsp; On: {{ question.date_created|date:"j F, Y" }}
+                                            </p>
+                                            <p class="card-text text-right" style="font-size: 0.9em;">Tags: <!-- Insert tags here --></p>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% empty %}
+                                <li class="text-muted">No questions asked yet.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Follows and Followed By Sections -->
+        <div class="row justify-content-center">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-lg border-light">
+                    <div class="card-body">
+                        <h5 class="card-title">Follows</h5>
+                        <ul class="list-unstyled">
+                            {% for following in profile.follows.all %}
+                                <li><a href="{% url 'profchat:profile' pk=following.user.id %}" class="text-dark">{{ following.user.username }}</a></li>
+                            {% empty %}
+                                <li class="text-muted">No follows yet.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-lg border-light">
+                    <div class="card-body">
+                        <h5 class="card-title">Followed By</h5>
+                        <ul class="list-unstyled">
+                            {% for follower in profile.followed_by.all %}
+                                <li><a href="{% url 'profchat:profile' pk=follower.user.id %}" class="text-dark">{{ follower.user.username }}</a></li>
+                            {% empty %}
+                                <li class="text-muted">No followers yet.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Bio -->
+    {% if profile.profile_bio|wordcount > 15 %}
+        <div class="modal fade" id="bioModal" tabindex="-1" role="dialog" aria-labelledby="bioModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bioModalLabel">Full Bio of {{ profile.user.username }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ profile.profile_bio }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

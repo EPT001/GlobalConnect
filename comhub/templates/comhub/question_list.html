@@ -1,0 +1,61 @@
+{% extends 'studentsconnect/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    List of Questions - StudentsConnect
+{% endblock %}
+
+{% block body_block %}
+    <div class="container my-5">
+        <!-- Header for List of Questions -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-4 font-weight-bold text-dark">Top Questions</h1>
+            <div>
+                {% if user.is_authenticated %}
+                    <a class="btn btn-success btn-lg" href="{% url 'comhub:add_question' %}">
+                        <i class="fas fa-plus"></i> Ask Question
+                    </a>
+                {% else %}
+                    <a class="btn btn-success btn-lg" href="{% url 'auth_login' %}">
+                        <i class="fas fa-sign-in-alt"></i> Login to Ask Question
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Questions List -->
+        <div class="list-question">
+            <div class="questions">
+                {% for question in object_list %}
+                    <div class="card my-3 shadow-lg border-light">
+                        <div class="card-body">
+                            <!-- Question Title -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="card-title">
+                                    <a href="{% url 'comhub:question_detail' question.id %}" class="text-dark">{{ question.title }}</a>
+                                </h3>
+                            </div>
+                            <!-- Question Content -->
+                            <hr>
+                            {% if question.content|wordcount <= 10 %}
+                                <p class="card-text">{{ question.content }}</p>
+                            {% else %}
+                                <p class="card-text">{{ question.content|truncatewords:10 }} <a href="{% url 'comhub:question_detail' question.id %}" class="text-info">Read More</a></p>
+                            {% endif %}
+                            <!-- Question Metadata -->
+                            <p class="card-text text-muted" style="font-size: 0.9em;">
+                                <i class="fas fa-user"></i> Asked By: <a href="{% url 'profchat:profile' pk=question.user.id %}" class="text-dark">{{ question.user }}</a> &nbsp;|&nbsp;
+                                <i class="fas fa-calendar-alt"></i> On: {{ question.date_created|date:"j F, Y" }}
+                            </p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-info text-center" role="alert">
+                        No questions found.
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

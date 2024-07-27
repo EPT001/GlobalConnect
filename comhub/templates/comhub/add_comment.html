@@ -1,0 +1,57 @@
+{% extends 'studentsconnect/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Add Comment - StudentsConnect
+{% endblock %}
+
+{% block body_block %}
+<div class="container my-5">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 font-weight-bold text-dark">Add Comment</h1>
+    </div>
+
+    <!-- Comment Form Card -->
+    <div class="card p-4 shadow-lg border-light rounded">
+        <div class="card-body">
+            <form method="POST" action="">
+                {% csrf_token %}
+                
+                <!-- Name Field -->
+                <div class="form-group">
+                    <label for="id_name" class="font-weight-bold text-dark">Name:</label>
+                    <input type="text" id="id_name" name="name" class="form-control form-control-lg" value="{{ form.name.value|default_if_none:'' }}">
+                    {% if form.name.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.name.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Content Field -->
+                <div class="form-group">
+                    <label for="id_content" class="font-weight-bold text-dark">Content:</label>
+                    <textarea id="id_content" name="content" class="form-control form-control-lg" rows="4">{{ form.content.value|default_if_none:'' }}</textarea>
+                    {% if form.content.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.content.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-comment-dots"></i> Add Comment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

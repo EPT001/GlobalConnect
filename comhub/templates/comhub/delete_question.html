@@ -1,0 +1,17 @@
+{% extends 'studentsconnect/base.html' %}
+
+{% block title_block %}
+    Delete Question - StudentsConnect
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    <h1>Delete Question</h1>
+    <p>Are you sure you want to delete "{{ question.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'comhub:question_detail' question.pk %}" class="btn btn-secondary ml-2">Cancel</a>
+    </form>
+</div>
+{% endblock %}
