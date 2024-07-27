@@ -1,0 +1,138 @@
+{% extends 'studentsconnect/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Global Connect - About
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .about-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+        .about-section {
+            margin-top: 30px;
+        }
+        .about-section h2 {
+            color: #0056b3;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .about-section p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .about-section ul {
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+        .back-to-index {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-to-index:hover {
+            background-color: #004494;
+        }
+        .img-featured {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+    </style>
+{% endblock %}
+
+{% block body_block %}
+    <div class="container my-5">
+        <!-- About Section -->
+        <div class="row">
+            <!-- Image Section -->
+            <div class="col-md-6 mb-4">
+                <div class="card border-light shadow-sm">
+                    <img src="{% static 'images/pngtree-international-student-education-study-abroad-study-abroad-png-image_6693151.jpg' %}" alt="About Us" class="img-featured card-img-top">
+                </div>
+            </div>
+            <!-- Text Section -->
+            <div class="col-md-6">
+                <div class="about-container">
+                    <h1 class="display-4 font-weight-bold">Global Connect</h1>
+                    <p>Welcome to Global Connect, your ultimate resource for international student advice and support.</p>
+                    <div class="about-section">
+                        <h2>About Us</h2>
+                        <p>Global Connect is designed to provide international students with the resources they need to succeed in their academic and personal lives. From finding jobs to maintaining social wellbeing, we cover it all.</p>
+                    </div>
+                    <div class="about-section">
+                        <h2>Our Mission</h2>
+                        <p>Our mission is to create a supportive community where international students can access vital information and connect with peers. We believe in fostering an inclusive environment that celebrates diversity and promotes academic excellence.</p>
+                    </div>
+                    <div class="about-section">
+                        <h2>Services We Offer</h2>
+                        <p>We offer a wide range of services including:</p>
+                        <ul>
+                            <li>International Student Advice</li>
+                            <li>Job Listings</li>
+                            <li>Social Wellbeing Programs</li>
+                            <li>Fun Activities and Events</li>
+                            <li>Funding Opportunities</li>
+                        </ul>
+                    </div>
+                    <a href="{% url 'studentsconnect:index' %}" class="back-to-index">Back to Index</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Additional Information (Optional) -->
+    <div class="modal fade" id="additionalInfoModal" tabindex="-1" role="dialog" aria-labelledby="additionalInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="additionalInfoModalLabel">Additional Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Here you can provide additional information about your organization or services if needed.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        // JavaScript to enhance the user experience
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToIndexButton = document.querySelector('.back-to-index');
+            backToIndexButton.addEventListener('mouseover', function() {
+                this.style.backgroundColor = '#003366';
+            });
+            backToIndexButton.addEventListener('mouseout', function() {
+                this.style.backgroundColor = '#0056b3';
+            });
+        });
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
